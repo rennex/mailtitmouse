@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-CONFIG_DIR = __dir__
-
-
 require "mail"
 
 class MailTitmouse
@@ -10,6 +7,10 @@ class MailTitmouse
 
   def initialize(maildata)
     @mail = Mail.new(maildata)
+  end
+
+  def find_config_path
+    "#{__dir__}/config/#{@mail.to.first}"
   end
 
   def run

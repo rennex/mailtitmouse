@@ -14,4 +14,8 @@ describe MailTitmouse do
     assert_equal ["titmouselist@example.net"], @mtm.mail.to
   end
 
+  it "finds the config file path" do
+    assert_match /\/titmouselist@example\.net$/, @mtm.find_config_path
+  end
+
 end
