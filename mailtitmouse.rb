@@ -10,10 +10,11 @@ class MailTitmouse
   def initialize(maildata)
     @mail = Mail.new(maildata)
     @config_dir = "#{__dir__}/config"
+    @list = Array(@mail.to).first
   end
 
-  def find_config_path(recipient = Array(@mail.to).first)
-    # clean up slashes and ".." from the address
+  def find_config_path(recipient = @list)
+    # clean up any slashes from the address
     addr = recipient.gsub(/\//, "_")
     raise "Invalid recipient address" unless addr =~ /\A[^@]+@[^@]+\.[^@]+\z/
 
@@ -24,8 +25,25 @@ class MailTitmouse
     @config = YAML.load_file(path)
   end
 
+  # format sub-addresses like <list-owner@example.com>
+  def list(x)
+    "<" + @list.sub(/@/, "-#{x}@") + ">"
+  end
+
   def run
-    p @mail.from
+    read_config
+
+    @mail.header["List"]        = "<#{@list}>"
+    @mail.header["List-Post"]   = "<mailto:#{@list}>"
+    @mail.header["Sender"]      = list "owner"
+    @mail.header["Errors-to"]   = list "errors"
+    @mail.header["Return-Path"] = list "bounce"
+
+    @config["recipients"].each do |recipient|
+      mail = @mail.dup
+      mail.smtp_envelope_to = recipient
+      mail.deliver
+    end
   end
 end
 

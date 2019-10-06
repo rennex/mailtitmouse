@@ -3,6 +3,10 @@ require_relative "helper.rb"
 
 require_relative "../mailtitmouse.rb"
 
+Mail.defaults do
+  delivery_method :test
+end
+
 describe MailTitmouse do
   INPUT_MAIL = File.read("#{__dir__}/fixtures/examplemail.txt").freeze
 
@@ -43,6 +47,29 @@ describe MailTitmouse do
     refute_empty recipients
     assert_includes recipients, "sender@example.com"
     assert_includes recipients, "participant@example.net"
+  end
+
+  it "can generate list-related addresses" do
+    assert_equal "<titmouselist-foo@example.net>", @mtm.list("foo")
+  end
+
+  it "delivers mails to list recipients" do
+    @mtm.run
+    assert_equal 2, Mail::TestMailer.deliveries.length
+
+    # get the mail sent back to the sender
+    mail = Mail::TestMailer.deliveries.find {|m| m.smtp_envelope_to == ["sender@example.com"] }
+    refute_nil mail
+
+    assert_equal ["titmouselist@example.net"],  mail.to
+    assert_equal "First post",                  mail.subject
+    assert_equal @mtm.mail.date,                mail.date
+    assert_equal ["sender@example.com"],        mail.from
+    assert_equal @mtm.mail.body.raw_source,     mail.body.raw_source
+
+    assert_equal "<titmouselist@example.net>",        mail.header["List"].value
+    assert_equal "<titmouselist-errors@example.net>", mail.header["Errors-to"].value
+    assert_equal "<titmouselist-bounce@example.net>", mail.header["Return-Path"].value
   end
 
 end
