@@ -3,6 +3,10 @@
 require "mail"
 require "yaml"
 
+Mail.defaults do
+  delivery_method :smtp, { :enable_starttls_auto => false }
+end
+
 class MailTitmouse
   attr_reader :mail
   attr_accessor :config_dir, :config
