@@ -1,0 +1,36 @@
+From participant@example.net  Sun Oct  6 20:01:13 2019
+Return-Path: <participant@example.net>
+Received: from welho-filter3.welho.com (welho-filter3.welho.com [83.102.41.25])
+	by example.net (Postfix) with ESMTPS id 18E3F126BF8
+	for <titmouselist@example.net>; Sun,  6 Oct 2019 20:01:13 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+	by welho-filter3.welho.com (Postfix) with ESMTP id CE3934CA3;
+	Sun,  6 Oct 2019 20:01:12 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at pp.htv.fi
+Received: from welho-smtp2.welho.com ([IPv6:::ffff:83.102.41.85])
+	by localhost (welho-filter3.welho.com [::ffff:83.102.41.25]) (amavisd-new, port 10024)
+	with ESMTP id ktXm4dyfvH63; Sun,  6 Oct 2019 20:01:10 +0300 (EEST)
+Received: from  [192.168.0.1] (1-1-1-1.bb.dnainternet.fi [1.1.1.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by welho-smtp2.welho.com (Postfix) with ESMTPS id 4705A28E;
+	Sun,  6 Oct 2019 20:01:08 +0300 (EEST)
+To: Another Recipient <someone@example.com>, Titmouse List <titmouselist@example.net>
+From: List Participant <participant@example.net>
+Subject: Second post
+Message-ID: <4a4251b6-9330-afc8-92c9-1e6b6b470e08@example.net>
+Date: Sun, 6 Oct 2019 20:01:06 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+
+=C3=96ri =C3=B6ri
+
+--=20
+Signature too
+
+

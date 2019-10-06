@@ -25,20 +25,20 @@ describe MailTitmouse do
 
   it "accepts well-formed email addresses" do
     addr = "perfectly@formed.address"
-    assert_includes @mtm.find_config_path(addr), addr
+    assert_includes @mtm.config_path_for(addr), addr
   end
 
   it "refuses non-global email addresses" do
     ["..", "../", "localuser", "almost@ok", "too@many@ats.foo"].each do |address|
       assert_raises {
-        @mtm.find_config_path(address)
+        @mtm.config_path_for(address)
       }
     end
   end
 
   it "doesn't accept path traversal characters in addresses" do
     addr = "foo/bar@what.ever"
-    refute_includes @mtm.find_config_path(addr), addr
+    refute_includes @mtm.config_path_for(addr), addr
   end
 
   it "reads the config file" do
@@ -50,10 +50,12 @@ describe MailTitmouse do
   end
 
   it "can generate list-related addresses" do
+    @mtm.list = "titmouselist@example.net"
     assert_equal "<titmouselist-foo@example.net>", @mtm.list("foo")
   end
 
   it "delivers mails to list recipients" do
+    Mail::TestMailer.deliveries.clear
     @mtm.run
     assert_equal 2, Mail::TestMailer.deliveries.length
 
@@ -70,6 +72,29 @@ describe MailTitmouse do
     assert_equal "<titmouselist@example.net>",        mail.header["List"].value
     assert_equal "<titmouselist-errors@example.net>", mail.header["Errors-to"].value
     assert_equal "<titmouselist-bounce@example.net>", mail.header["Return-Path"].value
+  end
+
+end
+
+
+# tests with a different message with multiple "To" addresses
+describe MailTitmouse do
+  INPUT_MAIL_2 = File.read("#{__dir__}/fixtures/examplemail2.txt").freeze
+
+  before do
+    @mtm = MailTitmouse.new(INPUT_MAIL_2)
+    @mtm.config_dir = "#{__dir__}/fixtures"
+  end
+
+  it "finds the config file path" do
+    assert_match /\/titmouselist@example\.net\.yml$/, @mtm.find_config_path
+  end
+
+  it "doesn't deliver messages to original To-addresses" do
+    Mail::TestMailer.deliveries.clear
+    @mtm.run
+    assert_equal @mtm.config["recipients"],
+                  Mail::TestMailer.deliveries.map(&:smtp_envelope_to).flatten
   end
 
 end
