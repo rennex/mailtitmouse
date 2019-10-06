@@ -1,0 +1,6 @@
+---
+# config for titmouselist@example.net
+recipients:
+  - sender@example.com
+  # comment
+  - participant@example.net # another comment

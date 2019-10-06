@@ -37,4 +37,12 @@ describe MailTitmouse do
     refute_includes @mtm.find_config_path(addr), addr
   end
 
+  it "reads the config file" do
+    @mtm.read_config
+    recipients = @mtm.config["recipients"]
+    refute_empty recipients
+    assert_includes recipients, "sender@example.com"
+    assert_includes recipients, "participant@example.net"
+  end
+
 end
